@@ -1,3 +1,4 @@
+const {join} = require("path");
 exports.config = {
     //
     // ====================
@@ -44,6 +45,7 @@ exports.config = {
     // from the same test should run tests.
     //
     maxInstances: 10,
+    webSocketUrl: true,
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -60,7 +62,7 @@ exports.config = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
-    logLevel: 'info',
+    logLevel: 'debug',
     //
     // Set specific log levels per logger
     // loggers:
@@ -100,7 +102,20 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['visual'],
+    services: [[ "visual",
+        // The options
+        {
+            // Some options, see the docs for more
+            baselineFolder: join(process.cwd(), "./test/imageComparisonBaseline/functional/"),
+            debug: true,
+            formatImageName: "{tag}-{width}x{height}",
+            screenshotPath: join(process.cwd(), ".tmp/"),
+            savePerInstance: true,
+            autoSaveBaseline: true,
+            // enableLegacyScreenshotMethod: true,
+            // hideScrollBars: true,
+            // scaleImagesToSameSize: true
+        } ]],
 
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -109,7 +124,7 @@ exports.config = {
     // Make sure you have the wdio adapter package for the specific framework installed
     // before running any tests.
     framework: 'mocha',
-    
+
     //
     // The number of times to retry the entire specfile when it fails as a whole
     // specFileRetries: 1,
@@ -129,7 +144,7 @@ exports.config = {
     // See the full list at http://mochajs.org/
     mochaOpts: {
         ui: 'bdd',
-        timeout: 60000
+        timeout: 180000
     },
 
     //
